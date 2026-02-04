@@ -1,0 +1,60 @@
+# Eclipse/STS Workspace (CRITICAL - fixes your errors)
+.metadata/
+.project
+.classpath
+.settings/
+.sts4-cache/
+.recommenders/
+
+# Maven build artifacts
+target/
+*.jar
+*.war
+*.ear
+*.class
+
+# Gradle
+.gradle/
+build/
+!.gradle/wrapper
+!.gradle/wrapper/gradle-wrapper.jar
+
+# Logs
+*.log
+logs/
+.m2/repository/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+.DS_Store?
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Runtime data
+pids/
+data/
+logs/
+
+# Environment variables
+.env
+*.env
+
+# Docker
+docker-compose.override.yml
+*.log
+
+# Application secrets (your SendGrid keys!)
+application-local.yml
+application-dev.yml
+application.properties
+
+# Keep these (your source code)
+!src/
+!pom.xml
+!application.yml

@@ -1,0 +1,165 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|c:\\users\\durve\\downloads\\vehicleservice\\vehicleservice\\vehicleservice\\controllers\\vehiclecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|solutionrelative:vehicleservice\\controllers\\vehiclecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|c:\\users\\durve\\downloads\\vehicleservice\\vehicleservice\\vehicleservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|solutionrelative:vehicleservice\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|c:\\users\\durve\\downloads\\vehicleservice\\vehicleservice\\vehicleservice\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|solutionrelative:vehicleservice\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|c:\\users\\durve\\downloads\\vehicleservice\\vehicleservice\\vehicleservice\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|solutionrelative:vehicleservice\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|c:\\users\\durve\\downloads\\vehicleservice\\vehicleservice\\vehicleservice\\data\\vehicledbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|solutionrelative:vehicleservice\\data\\vehicledbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|c:\\users\\durve\\downloads\\vehicleservice\\vehicleservice\\vehicleservice\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|solutionrelative:vehicleservice\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|c:\\users\\durve\\downloads\\vehicleservice\\vehicleservice\\vehicleservice\\models\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|solutionrelative:vehicleservice\\models\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|c:\\users\\durve\\downloads\\vehicleservice\\vehicleservice\\vehicleservice\\vehicleservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|solutionrelative:vehicleservice\\vehicleservice.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|c:\\users\\durve\\downloads\\vehicleservice\\vehicleservice\\vehicleservice\\migrations\\20260202075517_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1C919FB-560E-4A12-9C16-548792196CE6}|VehicleService\\VehicleService.csproj|solutionrelative:vehicleservice\\migrations\\20260202075517_initialcreate.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "VehicleDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Data\\VehicleDbContext.cs",
+              "RelativeDocumentMoniker": "VehicleService\\Data\\VehicleDbContext.cs",
+              "ToolTip": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Data\\VehicleDbContext.cs",
+              "RelativeToolTip": "VehicleService\\Data\\VehicleDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-02T07:37:14.945Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "VehicleService\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Properties\\launchSettings.json",
+              "RelativeToolTip": "VehicleService\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-02T07:32:19.677Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\appsettings.json",
+              "RelativeDocumentMoniker": "VehicleService\\appsettings.json",
+              "ToolTip": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\appsettings.json",
+              "RelativeToolTip": "VehicleService\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-02T07:30:44.819Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "VehicleController.cs",
+              "DocumentMoniker": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Controllers\\VehicleController.cs",
+              "RelativeDocumentMoniker": "VehicleService\\Controllers\\VehicleController.cs",
+              "ToolTip": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Controllers\\VehicleController.cs",
+              "RelativeToolTip": "VehicleService\\Controllers\\VehicleController.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAwAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-23T18:50:25.887Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "VehicleService\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\appsettings.Development.json",
+              "RelativeToolTip": "VehicleService\\appsettings.Development.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAABuAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2026-02-02T07:54:34.331Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Program.cs",
+              "RelativeDocumentMoniker": "VehicleService\\Program.cs",
+              "ToolTip": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Program.cs",
+              "RelativeToolTip": "VehicleService\\Program.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwCYAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-02T08:40:08.628Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "20260202075517_InitialCreate.cs",
+              "DocumentMoniker": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Migrations\\20260202075517_InitialCreate.cs",
+              "RelativeDocumentMoniker": "VehicleService\\Migrations\\20260202075517_InitialCreate.cs",
+              "ToolTip": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Migrations\\20260202075517_InitialCreate.cs",
+              "RelativeToolTip": "VehicleService\\Migrations\\20260202075517_InitialCreate.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-02T07:55:17.932Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Vehicle.cs",
+              "DocumentMoniker": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Models\\Vehicle.cs",
+              "RelativeDocumentMoniker": "VehicleService\\Models\\Vehicle.cs",
+              "ToolTip": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\Models\\Vehicle.cs",
+              "RelativeToolTip": "VehicleService\\Models\\Vehicle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-23T18:47:23.649Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "VehicleService.csproj",
+              "DocumentMoniker": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\VehicleService.csproj",
+              "RelativeDocumentMoniker": "VehicleService\\VehicleService.csproj",
+              "ToolTip": "C:\\Users\\durve\\Downloads\\VehicleService\\VehicleService\\VehicleService\\VehicleService.csproj",
+              "RelativeToolTip": "VehicleService\\VehicleService.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-01-23T18:32:45.64Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

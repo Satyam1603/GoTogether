@@ -1,0 +1,95 @@
+version: '3.8'
+
+services:
+  # MySQL Database Service
+  mysql-service:
+    image: mysql:8.0
+    container_name: gotogether-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: gotogether_rides_db
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache Service
+  redis-service:
+    image: redis:7-alpine
+    container_name: gotogether-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Eureka Server (Service Discovery)
+  eureka-server:
+    image: springcloud/eureka:latest
+    container_name: gotogether-eureka
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_HOSTNAME: eureka-server
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/eureka"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # GoTogether Ride Service
+  gotogether-ride-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gotogether-ride-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-service:3306/gotogether_rides_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      SPRING_APPLICATION_NAME: gotogether-ride-service
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+      LOGGING_LEVEL_ROOT: INFO
+    depends_on:
+      mysql-service:
+        condition: service_healthy
+      redis-service:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+networks:
+  gotogether-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  redis-data:

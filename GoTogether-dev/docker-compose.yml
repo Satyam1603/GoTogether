@@ -1,0 +1,362 @@
+version: '3.8'
+
+services:
+  # ==================== INFRASTRUCTURE SERVICES ====================
+
+  # MySQL Database - Users Service
+  mysql-users:
+    image: mysql:8.0
+    container_name: gotogether-mysql-users
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: gotogether_users_db
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-users-data:/var/lib/mysql
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # MySQL Database - Rides Service
+  mysql-rides:
+    image: mysql:8.0
+    container_name: gotogether-mysql-rides
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: gotogether_rides_db
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-rides-data:/var/lib/mysql
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # MySQL Database - Restaurants Service
+  mysql-restaurants:
+    image: mysql:8.0
+    container_name: gotogether-mysql-restaurants
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: restaurants
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql-restaurants-data:/var/lib/mysql
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # MySQL Database - Booking Service
+  mysql-booking:
+    image: mysql:8.0
+    container_name: gotogether-mysql-booking
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: booking_db
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+    ports:
+      - "3309:3306"
+    volumes:
+      - mysql-booking-data:/var/lib/mysql
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Redis Cache
+  redis-service:
+    image: redis:7-alpine
+    container_name: gotogether-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Eureka Server (Service Discovery)
+  eureka-server:
+    image: springcloud/eureka:latest
+    container_name: gotogether-eureka
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_HOSTNAME: eureka-server
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/eureka/apps"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # ==================== MICROSERVICES ====================
+
+  # User Service
+  gotogether-user-service:
+    build:
+      context: ./GoTogether-dev
+      dockerfile: Dockerfile
+    container_name: gotogether-user-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_APPLICATION_NAME: gotogether-user-service
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-users:3306/gotogether_users_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+      LOGGING_LEVEL_ROOT: INFO
+      # AWS S3 Configuration
+      AWS_S3_BUCKET: gotogether-user-service
+      AWS_S3_REGION: eu-north-1
+      AWS_ACCESS_KEY_ID: AKIA27Z645NFCNLB746T
+      AWS_SECRET_ACCESS_KEY: 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
+      # JWT Configuration
+      JWT_SECRET: GotogetherSecretKeyForJWTTokenGenerationAndValidationPurposeOnly2025
+      JWT_EXPIRATION: 3600000
+      JWT_REFRESH_EXPIRATION: 604800000
+      # Twilio Configuration
+      TWILIO_ACCOUNT_SID: AC4455579e54d9b104c60fb4f33e88facd
+      TWILIO_AUTH_TOKEN: e2cb106b237aa1e4a8e9fc6a4952a29c
+      TWILIO_PHONE_NUMBER: "+13612395632"
+      # SendGrid Configuration
+      SENDGRID_API_KEY: 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
+      SENDGRID_FROM_EMAIL: abhishekart2087@gmail.com
+      # MapMyIndia Configuration
+      MAPMYINDIA_API_KEY: wxjppjcjurunnlzhqtofgwhhnkxvgvjkpjnz
+      MAPMYINDIA_API_BASE_URL: https://search.mappls.com
+    depends_on:
+      mysql-users:
+        condition: service_healthy
+      redis-service:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # Ride Service
+  gotogether-ride-service:
+    build:
+      context: ./GoTogether-ride
+      dockerfile: Dockerfile
+    container_name: gotogether-ride-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_APPLICATION_NAME: gotogether-ride-service
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-rides:3306/gotogether_rides_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+      LOGGING_LEVEL_ROOT: INFO
+      SERVER_PORT: 8081
+    depends_on:
+      mysql-rides:
+        condition: service_healthy
+      redis-service:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # Restaurant Service
+  restaurant-service:
+    build:
+      context: ./restaurants_backend
+      dockerfile: Dockerfile
+    container_name: restaurant-service
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_APPLICATION_NAME: Restaurant-Backend
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-restaurants:3306/restaurants?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"
+      SERVER_PORT: 8080
+      LOGGING_LEVEL_ROOT: INFO
+    depends_on:
+      mysql-restaurants:
+        condition: service_healthy
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # Booking Service
+  booking-service:
+    build:
+      context: ./demo
+      dockerfile: Dockerfile
+    container_name: booking-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_APPLICATION_NAME: booking-service
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-booking:3306/booking_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQLDialect
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "false"
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+      LOGGING_LEVEL_ROOT: INFO
+      SERVER_PORT: 8083
+    depends_on:
+      mysql-booking:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # ==================== API GATEWAYS ====================
+
+  # Healthcare API Gateway
+  healthcare-api-gateway:
+    build:
+      context: ./HealthcareApiGateway
+      dockerfile: Dockerfile
+    container_name: healthcare-api-gateway
+    ports:
+      - "9090:9090"
+    environment:
+      SPRING_APPLICATION_NAME: healthcare-api-gateway
+      SERVER_PORT: 9090
+      EUREKA_CLIENT_SERVICE_URL_DEFAULT_ZONE: http://eureka-server:8761/eureka/
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED: "false"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "*"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+      LOGGING_LEVEL_ROOT: INFO
+      JWT_SECRET: GotogetherSecretKeyForJWTTokenGenerationAndValidationPurposeOnly2025
+      JWT_EXPIRATION: 3600000
+      JWT_REFRESH_EXPIRATION: 604800000
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      gotogether-user-service:
+        condition: service_started
+      gotogether-ride-service:
+        condition: service_started
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # TrueMe API Gateway
+  trueme-api-gateway:
+    build:
+      context: ./trueme-api-gateway
+      dockerfile: Dockerfile
+    container_name: trueme-api-gateway
+    ports:
+      - "9091:9090"
+    environment:
+      SPRING_APPLICATION_NAME: trueme-api-gateway
+      SERVER_PORT: 9090
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS.[/**].ALLOWED_ORIGINS: "http://localhost:3000,http://localhost:3001,http://localhost:3002"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS.[/**].ALLOWED_METHODS: "GET,POST,PUT,DELETE,OPTIONS"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS.[/**].ALLOWED_HEADERS: "*"
+      SPRING_CLOUD_GATEWAY_GLOBALCORS_CORS_CONFIGURATIONS.[/**].ALLOW_CREDENTIALS: "true"
+      SPRING_CLOUD_GATEWAY_DISCOVERY_LOCATOR_ENABLED: "false"
+      # Routes for Booking Service
+      SPRING_CLOUD_GATEWAY_ROUTES_0_ID: booking-route
+      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: "lb://booking-service"
+      SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: "Path=/booking/**"
+      # Routes for User Service
+      SPRING_CLOUD_GATEWAY_ROUTES_1_ID: user-route
+      SPRING_CLOUD_GATEWAY_ROUTES_1_URI: "lb://gotogether-user-service"
+      SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: "Path=/users/**"
+      # Routes for Ride Service
+      SPRING_CLOUD_GATEWAY_ROUTES_2_ID: ride-route
+      SPRING_CLOUD_GATEWAY_ROUTES_2_URI: "lb://gotogether-ride-service"
+      SPRING_CLOUD_GATEWAY_ROUTES_2_PREDICATES_0: "Path=/rides/**"
+      # Routes for Restaurant Service
+      SPRING_CLOUD_GATEWAY_ROUTES_3_ID: restaurant-route
+      SPRING_CLOUD_GATEWAY_ROUTES_3_URI: "lb://restaurant-service"
+      SPRING_CLOUD_GATEWAY_ROUTES_3_PREDICATES_0: "Path=/restaurants/**"
+      MANAGEMENT_ENDPOINTS_WEB_EXPOSURE_INCLUDE: "health,info"
+      MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS: always
+      LOGGING_LEVEL_ROOT: INFO
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+      booking-service:
+        condition: service_started
+      gotogether-user-service:
+        condition: service_started
+      gotogether-ride-service:
+        condition: service_started
+      restaurant-service:
+        condition: service_started
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+networks:
+  gotogether-network:
+    driver: bridge
+
+volumes:
+  mysql-users-data:
+  mysql-rides-data:
+  mysql-restaurants-data:
+  mysql-booking-data:
+  redis-data:
