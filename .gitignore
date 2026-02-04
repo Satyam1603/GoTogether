@@ -1,0 +1,27 @@
+# Eclipse/STS (Fixes your permission errors)
+.metadata/
+.project
+.classpath
+.settings/
+.sts4-cache/
+
+# Maven builds
+target/
+*.jar
+*.war
+
+# Logs & Temp
+*.log
+logs/
+
+# IDE files
+.vscode/
+.idea/
+
+# Secrets (SendGrid keys)
+application-local.yml
+application-dev.yml
+
+# OS files
+.DS_Store
+Thumbs.db
