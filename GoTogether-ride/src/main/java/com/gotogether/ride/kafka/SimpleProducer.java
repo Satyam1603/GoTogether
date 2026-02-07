@@ -35,8 +35,9 @@ public class SimpleProducer {
      * @param message - The message to send
      */
     public void sendMessage(SimpleMessage message) {
-        logger.info("SENDING MESSAGE: {}", message.getMessage());
-        
+//        logger.info("SENDING MESSAGE: {}", message.getMessage());
+    	 logger.info("SENDING MESSAGE: {}", message);
+    	 System.out.println("SENDING MESSAGE: " + message);
         // Send message to topic
         // First parameter: topic name
         // Second parameter: the message object

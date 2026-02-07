@@ -1,0 +1,229 @@
+version: '3.8'
+
+services:
+  # MySQL Database for all services
+  mysql:
+    image: mysql:8.0
+    container_name: gotogether-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: gotogether
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: gotogether-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  kafka:
+    image: apache/kafka:3.7.0
+    container_name: gotogether-kafka
+    ports:
+      - "9093:9092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:29092,CONTROLLER://:29093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9093
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_LOG_DIRS: /tmp/kafka-logs
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk # Random base64 UUID
+    networks:
+      - gotogether-network
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  # Eureka Service Discovery (Optional - if you need it)
+  # eureka-server:
+  #   image: springcloud/eureka
+  #   container_name: gotogether-eureka
+  #   ports:
+  #     - "8761:8761"
+  #   networks:
+  #     - gotogether-network
+  #   healthcheck:
+  #     test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+  #     interval: 30s
+  #     timeout: 10s
+  #     retries: 3
+
+  # User Service
+  user-service:
+    build:
+      context: ./GoTogether-dev
+      dockerfile: Dockerfile
+    container_name: gotogether-user-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/gotogether?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SERVER_PORT: 8081
+      # Add your AWS S3 credentials here or use IAM roles
+      # AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      # AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      # AWS_REGION: ${AWS_REGION}
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # Booking Service
+  booking-service:
+    build:
+      context: ./Booking
+      dockerfile: Dockerfile
+    container_name: gotogether-booking-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/gotogether?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SERVER_PORT: 8082
+    ports:
+      - "8082:8082"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # Ride Service
+  ride-service:
+    build:
+      context: ./GoTogether-ride
+      dockerfile: Dockerfile
+    container_name: gotogether-ride-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/gotogether?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root123
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SERVER_PORT: 8083
+    ports:
+      - "8083:8083"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # Vehicle Service (.NET)
+  vehicle-service:
+    build:
+      context: ./VehicleService
+      dockerfile: Dockerfile
+    container_name: gotogether-vehicle-service
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_URLS: http://+:8084
+      ConnectionStrings__DefaultConnection: "Server=mysql;Port=3306;Database=gotogether;User=root;Password=root123;"
+    ports:
+      - "8084:8084"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./trueme-api-gateway
+      dockerfile: Dockerfile
+    container_name: gotogether-api-gateway
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SERVER_PORT: 8080
+      # Configure routes to backend services
+      USER_SERVICE_URL: http://user-service:8081
+      BOOKING_SERVICE_URL: http://booking-service:8082
+      RIDE_SERVICE_URL: http://ride-service:8083
+      VEHICLE_SERVICE_URL: http://vehicle-service:8084
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - booking-service
+      - ride-service
+      - vehicle-service
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+  # Frontend
+  frontend:
+    build:
+      context: ./Car Sharing Platform (2)
+      dockerfile: Dockerfile
+    container_name: gotogether-frontend
+    environment:
+      VITE_API_BASE_URL: http://localhost:8080
+    ports:
+      - "80:80"
+    depends_on:
+      - api-gateway
+    networks:
+      - gotogether-network
+    restart: unless-stopped
+
+networks:
+  gotogether-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local

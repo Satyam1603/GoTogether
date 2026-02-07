@@ -32,11 +32,13 @@ namespace VehicleService
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            // Enable Swagger in all environments for testing
+            app.UseSwagger();
+            app.UseSwaggerUI(c => 
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Vehicle Service V1");
+                c.RoutePrefix = "swagger"; // Available at /swagger/index.html
+            });
             app.UseCors("AllowAll");
             app.UseAuthorization();
             

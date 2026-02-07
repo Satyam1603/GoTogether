@@ -35,13 +35,18 @@ public class SimpleConsumer {
         groupId = "user-service-group",                 // This consumer group
         containerFactory = "kafkaListenerContainerFactory"  // Use default container
     )
-    public void consumeMessage(SimpleMessage message) {
+    public void consumeMessage(SimpleMessage1 message) {
         try {
             // Log the received message
+        	System.out.println("====================================");
+        	System.out.println("MESSAGE RECEIVED FROM KAFKA!");
+        	System.out.println("====================================");
+        	System.out.println("Raw Message: " + message.toString());
             logger.info("====================================");
             logger.info("MESSAGE RECEIVED FROM KAFKA!");
             logger.info("====================================");
-            logger.info("Message: {}", message.getMessage());
+            logger.info("Raw Message: {}", message);
+            System.out.print(message.getMessage());
             logger.info("Ride ID: {}", message.getRideId());
             logger.info("Event Type: {}", message.getEventType());
             logger.info("====================================");

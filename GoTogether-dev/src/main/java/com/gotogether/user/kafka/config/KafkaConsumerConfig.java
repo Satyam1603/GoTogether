@@ -51,7 +51,7 @@ public class KafkaConsumerConfig {
         
         // Kafka broker address - where to connect
         configs.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-        
+        configs.put(JsonDeserializer.TYPE_MAPPINGS, "com.gotogether.ride.kafka.SimpleMessage:com.gotogether.user.kafka.SimpleMessage1");
         // Consumer group ID - identifies this consumer group
         // All consumers in same group read same messages together
         configs.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);

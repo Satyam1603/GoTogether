@@ -1,0 +1,14 @@
+target/
+.mvn/
+.git/
+.gitignore
+*.md
+*.log
+.classpath
+.project
+.settings/
+.factorypath
+BOOT-INF/
+*.class
+*.jar
+!target/*.jar
